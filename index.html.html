@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Apps Portal</title>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Login Page Styles */
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            min-height: 600px;
+        }
+
+        .login-left {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-left h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .login-left p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .login-right {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-form h2 {
+            color: var(--dark-color);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .register-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Dashboard Styles (Hidden by default) */
+        .dashboard {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            min-height: 700px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .dashboard-content {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .app-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .app-card h3 {
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+
+        .app-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .app-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .launch-btn {
+            background: var(--primary-color);
+            color: white;
+            flex: 2;
+        }
+
+        .details-btn {
+            background: #f0f0f0;
+            color: var(--dark-color);
+            flex: 1;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+            }
+            
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+        }
+
+        /* Error Message */
+        .error-message {
+            background: #ffebee;
+            color: var(--danger-color);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--dark-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Page -->
+        <div class="login-container" id="loginPage">
+            <div class="login-left">
+                <h1>My Apps Portal</h1>
+                <p>Welcome to your personal apps dashboard. Access all your applications in one secure place. Manage your tools, launch applications, and stay productive.</p>
+                <div style="margin-top: 30px;">
+                    <h3>Demo Credentials:</h3>
+                    <p>Email: demo@example.com<br>Password: demo123</p>
+                </div>
+            </div>
+            <div class="login-right">
+                <div class="login-form">
+                    <h2>Sign In to Your Account</h2>
+                    <div class="error-message" id="errorMessage">
+                        Invalid email or password. Please try again.
+                    </div>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="btn">Sign In</button>
+                    </form>
+                    <div class="register-link">
+                        <p>Don't have an account? <a href="#" id="showRegister">Sign up</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="dashboard" id="dashboard">
+            <div class="header">
+                <h1>My Applications</h1>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">JD</div>
+                    <div>
+                        <div id="userName">John Doe</div>
+                        <div style="font-size: 12px; opacity: 0.8;" id="userEmail">demo@example.com</div>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+            
+            <div class="dashboard-content">
+                <!-- App cards will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- App Details Modal -->
+    <div class="modal" id="appModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sample apps data
+        const sampleApps = [
+            {
+                id: 1,
+                name: "Task Manager",
+                description: "A powerful task management application with team collaboration features, deadlines, and progress tracking.",
+                icon: "📋",
+                category: "Productivity",
+                status: "Active",
+                launchUrl: "https://task-manager.example.com",
+                details: {
+                    version: "2.1.4",
+                    lastUpdated: "2024-01-15",
+                    users: "5,234",
+                    features: ["Task Scheduling", "Team Collaboration", "Progress Analytics", "Mobile App"]
+                }
+            },
+            {
+                id: 2,
+                name: "Finance Tracker",
+                description: "Personal finance management tool with budgeting, expense tracking, and financial reports.",
+                icon: "💰",
+                category: "Finance",
+                status: "Active",
+                launchUrl: "https://finance.example.com",
+                details: {
+                    version: "1.8.2",
+                    lastUpdated: "2024-01-10",
+                    users: "8,567",
+                    features: ["Budget Planning", "Expense Tracking", "Investment Tracking", "Tax Reports"]
+                }
+            },
+            {
+                id: 3,
+                name: "Photo Editor Pro",
+                description: "Advanced photo editing application with AI-powered tools and professional filters.",
+                icon: "🎨",
+                category: "Creative",
+                status: "Beta",
+                launchUrl: "https://photo-editor.example.com",
+                details: {
+                    version: "3.0.0-beta",
+                    lastUpdated: "2024-01-20",
+                    users: "2,345",
+                    features: ["AI Enhance", "Layer Support", "RAW Processing", "Export Tools"]
+                }
+            },
+            {
+                id: 4,
+                name: "Health Monitor",
+                description: "Health tracking application with workout plans, diet tracking, and health insights.",
+                icon: "❤️",
+                category: "Health",
+                status: "Active",
+                launchUrl: "https://health.example.com",
+                details: {
+                    version: "2.3.1",
+                    lastUpdated: "2024-01-05",
+                    users: "12,890",
+                    features: ["Workout Plans", "Diet Tracking", "Health Analytics", "Doctor Connect"]
+                }
+            },
+            {
+                id: 5,
+                name: "Code Editor",
+                description: "Cloud-based code editor with real-time collaboration and multiple language support.",
+                icon: "💻",
+                category: "Development",
+                status: "Active",
+                launchUrl: "https://code.example.com",
+                details: {
+                    version: "1.5.7",
+                    lastUpdated: "2024-01-18",
+                    users: "15,432",
+                    features: ["Real-time Collaboration", "Git Integration", "Debug Tools", "Cloud Storage"]
+                }
+            },
+            {
+                id: 6,
+                name: "Music Studio",
+                description: "Digital audio workstation for music creation and editing with virtual instruments.",
+                icon: "🎵",
+                category: "Creative",
+                status: "Coming Soon",
+                launchUrl: "#",
+                details: {
+                    version: "Beta",
+                    lastUpdated: "2024-02-01",
+                    users: "Preview",
+                    features: ["Virtual Instruments", "Audio Effects", "Mixing Tools", "Export Options"]
+                }
+            }
+        ];
+
+        // Demo user credentials
+        const demoUser = {
+            email: "demo@example.com",
+            password: "demo123",
+            name: "John Doe"
+        };
+
+        // DOM Elements
+        const loginPage = document.getElementById('loginPage');
+        const dashboard = document.getElementById('dashboard');
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const appModal = document.getElementById('appModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalContent = document.getElementById('modalContent');
+        const userName = document.getElementById('userName');
+        const userEmail = document.getElementById('userEmail');
+        const userAvatar = document.getElementById('userAvatar');
+
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (isLoggedIn === 'true') {
+                showDashboard();
+                loadUserApps();
+            }
+        });
+
+        // Login Form Submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple validation (in real app, this would be server-side)
+            if (email === demoUser.email && password === demoUser.password) {
+                // Store login state
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userName', demoUser.name);
+                localStorage.setItem('userEmail', email);
+                
+                showDashboard();
+                loadUserApps();
+            } else {
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        // Show Dashboard
+        function showDashboard() {
+            loginPage.style.display = 'none';
+            dashboard.style.display = 'block';
+            
+            // Update user info
+            const storedName = localStorage.getItem('userName') || demoUser.name;
+            const storedEmail = localStorage.getItem('userEmail') || demoUser.email;
+            
+            userName.textContent = storedName;
+            userEmail.textContent = storedEmail;
+            userAvatar.textContent = storedName.split(' ').map(n => n[0]).join('');
+        }
+
+        // Load User Apps
+        function loadUserApps() {
+            const dashboardContent = document.querySelector('.dashboard-content');
+            dashboardContent.innerHTML = '';
+            
+            // Add welcome message
+            const welcomeDiv = document.createElement('div');
+            welcomeDiv.className = 'welcome-message';
+            welcomeDiv.style.gridColumn = '1 / -1';
+            welcomeDiv.innerHTML = `
+                <h2>Welcome back, ${userName.textContent}!</h2>
+                <p>You have ${sampleApps.length} applications available</p>
+            `;
+            dashboardContent.appendChild(welcomeDiv);
+            
+            // Add app cards
+            sampleApps.forEach(app => {
+                const appCard = document.createElement('div');
+                appCard.className = 'app-card';
+                appCard.innerHTML = `
+                    <div class="app-icon">${app.icon}</div>
+                    <h3>${app.name}</h3>
+                    <p>${app.description}</p>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                        <span style="background: ${getStatusColor(app.status)}; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px;">
+                            ${app.status}
+                        </span>
+                        <span style="color: #666; font-size: 14px;">${app.category}</span>
+                    </div>
+                    <div class="app-actions">
+                        <button class="action-btn launch-btn" onclick="launchApp('${app.launchUrl}', ${app.id})">
+                            ${app.status === 'Coming Soon' ? 'Preview' : 'Launch App'}
+                        </button>
+                        <button class="action-btn details-btn" onclick="showAppDetails(${app.id})">
+                            Details
+                        </button>
+                    </div>
+                `;
+                dashboardContent.appendChild(appCard);
+            });
+        }
+
+        // Get status color
+        function getStatusColor(status) {
+            switch(status) {
+                case 'Active': return '#2ecc71';
+                case 'Beta': return '#f39c12';
+                case 'Coming Soon': return '#9b59b6';
+                default: return '#95a5a6';
+            }
+        }
+
+        // Launch App
+        function launchApp(url, appId) {
+            if (url === '#') {
+                alert('This application is coming soon!');
+                return;
+            }
+            
+            // In a real app, you might want to track app launches
+            const app = sampleApps.find(a => a.id === appId);
+            console.log(`Launching ${app.name}...`);
+            
+            // Open in new tab (or redirect)
+            window.open(url, '_blank');
+        }
+
+        // Show App Details
+        function showAppDetails(appId) {
+            const app = sampleApps.find(a => a.id === appId);
+            
+            modalContent.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div class="app-icon">${app.icon}</div>
+                        <div>
+                            <h2 style="color: var(--dark-color);">${app.name}</h2>
+                            <p style="color: #666;">${app.category} • ${app.status}</p>
+                        </div>
+                    </div>
+                    <p>${app.description}</p>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3 style="margin-bottom: 15px; color: var(--dark-color);">App Details</h3>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                        <div>
+                            <strong>Version</strong>
+                            <p>${app.details.version}</p>
+                        </div>
+                        <div>
+                            <strong>Last Updated</strong>
+                            <p>${app.details.lastUpdated}</p>
+                        </div>
+                        <div>
+                            <strong>Active Users</strong>
+                            <p>${app.details.users}</p>
+                        </div>
+                        <div>
+                            <strong>Status</strong>
+                            <p>${app.status}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 style="margin-bottom: 15px; color: var(--dark-color);">Features</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        ${app.details.features.map(feature => `
+                            <li style="padding: 8px 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+                                <span style="color: var(--success-color); margin-right: 10px;">✓</span>
+                                ${feature}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                
+                <div style="margin-top: 30px; text-align: center;">
+                    <button class="action-btn launch-btn" onclick="launchApp('${app.launchUrl}', ${app.id})" style="width: auto; padding: 12px 30px;">
+                        ${app.status === 'Coming Soon' ? 'Get Notified' : 'Launch Application'}
+                    </button>
+                </div>
+            `;
+            
+            appModal.style.display = 'flex';
+        }
+
+        // Close Modal
+        closeModal.addEventListener('click', () => {
+            appModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === appModal) {
+                appModal.style.display = 'none';
+            }
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            
+            // Clear form
+            loginForm.reset();
+            
+            dashboard.style.display = 'none';
+            loginPage.style.display = 'flex';
+        });
+
+        // Show register form (demo)
+        document.getElementById('showRegister').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Registration feature would be implemented in a full application. For demo, use: demo@example.com / demo123');
+        });
+    </script>
+</body>
+</html>
